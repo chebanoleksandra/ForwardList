@@ -2,6 +2,29 @@
 #include <iostream>
 using namespace std;
 
+void ForwardList::clear()
+{
+	Node* current = head;
+	while (current!=nullptr)
+	{
+		Node* temp = current->next;
+		delete current;
+		current = temp;
+	}
+	head = nullptr;
+	tail = nullptr;
+}
+
+ForwardList::~ForwardList()
+{
+	clear();
+}
+
+ForwardList::ForwardList(const ForwardList& other)
+{
+	
+}
+
 void ForwardList::push_back(int value)
 {
 	if (head && tail)
@@ -18,6 +41,33 @@ void ForwardList::push_back(int value)
 	}
 }
 
+void ForwardList::push_front(int value)
+{
+	Node* new_node = new Node(value);
+	new_node->next = head;
+	head = new_node;
+	if (!tail)
+	{
+		tail = new_node;
+	}
+}
+
+bool ForwardList::push_after(Node* prev, int value)
+{
+	if (!prev)
+	{
+		return false;
+	}
+	Node* new_node = new Node(value);
+	new_node->next = prev->next;
+	prev->next = new_node;
+	if (prev == tail)
+	{
+		tail = new_node;
+	}
+	return true;
+}
+
 void ForwardList::print()
 {
 	Node* current = head;
@@ -27,4 +77,29 @@ void ForwardList::print()
 		current = current->next;
 	}
 	cout << endl;
+}
+
+//дописала геттери для полей класу ForwardList для зберіганні їх інкапсульованими, але з можливістю за потреби їх дістати(приклад - строка 11 main.cpp)
+Node* ForwardList::GetHead()
+{
+	return head;
+}
+
+Node* ForwardList::GetTail()
+{
+	return tail;
+}
+
+const Node* ForwardList::find(int value)
+{
+	Node* current = head;
+	while (current != nullptr)
+	{
+		if (current->value == value)
+		{
+			return current;
+		}
+		current = current->next;
+	}
+	return nullptr;
 }
